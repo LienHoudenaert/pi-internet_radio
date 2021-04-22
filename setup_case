@@ -5,3 +5,5 @@ sudo wget https://raw.githubusercontent.com/LienHoudenaert/pi-internet_radio/mai
 
 sudo wget https://raw.githubusercontent.com/LienHoudenaert/pi-internet_radio/main/playlist/playlist.m3u -O /var/lib/mpd/playlists/playlist.m3u
 mpc load playlist
+
+sudo nano python3 case.py
