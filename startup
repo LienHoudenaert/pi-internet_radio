@@ -4,7 +4,6 @@ sudo wget https://raw.githubusercontent.com/LienHoudenaert/pi-internet_radio/mai
 #Change permissions
 sudo chmod 755 launcher.sh
 
-
 crontab -e
 
 #Add:
