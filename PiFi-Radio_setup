@@ -24,3 +24,13 @@ Edit config.json:
 ```
 sudo nano /etc/pifi/config.json
 ```
+```
+sudo wget https://raw.githubusercontent.com/rccavalcanti/pifi-radio/master/docs/pifi.service.sample -O /etc/systemd/system/pifi.service
+```
+```
+sudo nano /etc/systemd/system/pifi.service
+```
+```
+sudo systemctl start pifi
+sudo systemctl enable pifi
+```
