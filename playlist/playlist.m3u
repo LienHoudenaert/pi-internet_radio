@@ -1,0 +1,15 @@
+# file located in /var/lib/mpd/playlists/
+# do "mpc load playlist" to load playlist, use "mpc playlist" to view the current playlist.
+
+#EXTINF:0,QMUSIC
+http://playerservices.streamtheworld.com/api/livestream-redirect/QMUSIC.mp3
+#EXTINF:0,QFOUTERADIO
+http://playerservices.streamtheworld.com/api/livestream-redirect/QFOUTERADIO.mp3
+#EXTINF:0,QMAXIMUMHITS
+http://playerservices.streamtheworld.com/api/livestream-redirect/QMAXIMUMHITS.mp3
+#EXTINF:0,Q10S
+http://playerservices.streamtheworld.com/api/livestream-redirect/Q10S.mp3
+#EXTINF:0,Q00S
+http://playerservices.streamtheworld.com/api/livestream-redirect/Q00S.mp3
+#EXTINF:0,Q90S
+http://playerservices.streamtheworld.com/api/livestream-redirect/Q90S.mp3
