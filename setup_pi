@@ -1,0 +1,60 @@
+sudo rfkill unblock 0
+
+sudo nano /etc/dhcpcd.conf
+
+interface wlan0
+static ip_address=192.168.0.10/24
+static routers=192.168.0.1
+static domain_name_servers=8.8.8.8
+
+sudo reboot
+
+#GPIO configuration:
+
+sudo apt-get update
+sudo apt-get install python3-dev python3-setuptools
+sudo apt-get install python3-rpi.gpio
+
+#Install latest version wiringpi for Python3 to test manually:
+
+cd /tmp 
+wget https://project-downloads.drogon.net/wiringpi-latest.deb 
+sudo dpkg -i wiringpi-latest.deb 
+
+#Enable spi:
+
+sudo nano /boot/config.txt
+#dtparam=spi=on -> remove # Then    
+CTRL+X and save 
+sudo reboot
+
+#Install spi library: (10min)
+
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install python3-pip
+sudo pip3 install --upgrade adafruit-python-shell
+wget https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/raspi-blinka.py
+sudo python3 raspi-blinka.py -> choose yes for update python 2.7 and reboot
+sudo pip3 install adafruit-circuitpython-busdevice
+
+#LCD software:
+
+sudo apt-get update
+sudo apt-get install python3-pil
+sudo apt-get install python3-pip
+sudo pip3 install adafruit-circuitpython-pcd8544
+
+#Internet radio:
+
+sudo apt-get install mpd mpc  (mediaplayer deamon and client)
+sudo apt-get install alsa-utils  (controlling the sound card)
+sudo pip3 install python-mpd2 
+
+#Adafruit MAX98357 I2S Class-D Mono Amp
+
+sudo curl -sS https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/i2samp.sh | bash
+-> reboot
+Run again: sudo curl -sS https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/i2samp.sh | bash
+
+sudo reboot
