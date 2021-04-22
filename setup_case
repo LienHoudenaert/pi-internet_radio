@@ -1,1 +1,2 @@
-
+sudo wget https://raw.githubusercontent.com/LienHoudenaert/pi-internet_radio/main/case/case.py -O /home/pi/case.py
+sudo wget https://raw.githubusercontent.com/LienHoudenaert/pi-internet_radio/main/case/channel_count.txt -O /home/pi/channel_count.txt
