@@ -24,7 +24,7 @@ sudo dpkg -i wiringpi-latest.deb
 #Enable spi:
 
 sudo nano /boot/config.txt
-#dtparam=spi=on -> remove # Then    
+#dtparam=spi=on -> remove #
 CTRL+X and save 
 sudo reboot
 
