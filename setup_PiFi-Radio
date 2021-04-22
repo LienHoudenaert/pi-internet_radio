@@ -1,36 +1,26 @@
 # PiFi Radio setup for webinterface:
 
-```
 sudo apt install ruby-full mpd
 sudo systemctl enable --now mpd
-```
 
-```
 sudo gem install pifi --no-document
-```
-```
+
 sudo mkdir -p /etc/pifi
 sudo wget https://raw.githubusercontent.com/rccavalcanti/pifi-radio/master/docs/streams.json.sample -O /etc/pifi/streams.json
-```
 
 Edit streams.json:
-```
 sudo nano etc/pifi/streams.json
-```
-```
+
 sudo wget https://raw.githubusercontent.com/rccavalcanti/pifi-radio/master/docs/config.json.sample -O /etc/pifi/config.json
-```
+
 Edit config.json:
-```
 sudo nano /etc/pifi/config.json
-```
-```
+
 sudo wget https://raw.githubusercontent.com/rccavalcanti/pifi-radio/master/docs/pifi.service.sample -O /etc/systemd/system/pifi.service
-```
-```
+
+Edit pifi.service
 sudo nano /etc/systemd/system/pifi.service
-```
-```
-sudo systemctl start pifi
+
+sudo systemctl (re)start pifi
 sudo systemctl enable pifi
-```
+
