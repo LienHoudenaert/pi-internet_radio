@@ -1,0 +1,15 @@
+#Download launcher script
+sudo wget https://raw.githubusercontent.com/LienHoudenaert/pi-internet_radio/main/docs/launcher.sh -O /home/pi/launcher.sh
+
+#Change permissions
+sudo chmod 755 launcher.sh
+
+
+crontab -e
+
+#Add:
+@reboot sh /home/pi/launcher.sh >/home/pi/logs/cronlog 2>&1
+
+#If it doesn't work, check out the log file:
+cd logs
+cat cronlog
