@@ -1,0 +1,8 @@
+{
+    "QMUSIC": "http://playerservices.streamtheworld.com/api/livestream-redirect/QMUSIC.mp3"
+    "QFOUTERADIO": "http://playerservices.streamtheworld.com/api/livestream-redirect/QFOUTERADIO.mp3"
+    "QMAXIMUMHITS": "http://playerservices.streamtheworld.com/api/livestream-redirect/QMAXIMUMHITS.mp3"
+    "Q10S": "http://playerservices.streamtheworld.com/api/livestream-redirect/Q10S.mp3"
+    "Q00S": "http://playerservices.streamtheworld.com/api/livestream-redirect/Q00S.mp3"
+    "Q90S": "http://playerservices.streamtheworld.com/api/livestream-redirect/Q90S.mp3"
+}
