@@ -16,7 +16,6 @@ from PIL import ImageDraw
 from PIL import ImageFont
 url = "http://iotessentialsr0800828.hub.ubeac.io/iotesslienhoudenaert"
 uid = "iotesslienhoudenaert"
-#uid = "0749a8fc-a841-44ef-8dce-741dfaa367e8"
 
 os.system("sudo systemctl start pifi")
 os.system("mpc clear")
@@ -45,13 +44,14 @@ display.show()
 # Load default font
 # font = ImageFont.load_default()
 font=ImageFont.truetype("/usr/share/fonts/truetype/noto/NotoMono-Regular.ttf", 10)
-font2=ImageFont.truetype("/usr/share/fonts/truetype/noto/NotoMono-Regular.ttf", 11)
+font2=ImageFont.truetype("/usr/share/fonts/truetype/noto/NotoMono-Regular.ttf", 9)
 
 #get drawing object to draw on image
 nummer = 4
 
 #text
 image = Image.new('1', (display.width, display.height))
+image2 = Image.new('1', (display.width, display.height))
 
 # set max speed
 spi.max_speed_hz=(1000000)
@@ -83,8 +83,8 @@ def blink(pin1,pin2):
 	time.sleep(0.0001)
 
 #open and read the file:
-f = open("channel_count.txt", "r")
-i = int(f.read())
+txt = open("channel_count.txt", "r")
+i = int(txt.read())
 
 if (i == 1):
     os.system("mpc play 1")
@@ -103,65 +103,52 @@ oldChannel = 0
 oldVolume = -1
 volume = readadc(1) # read channel 1
 vol = round((volume/10.23))
+vol = vol - 100
+vol = abs(vol)
 
 def ubeac(): 
     
-        while True:
-            #channel = readadc(0) # read channel 0
-            volume = readadc(1) # read channel 1
-            
-            chan = i  
-            vol = round((volume/10.23))
-            
-            data= {
-                "id": uid,
-                "sensors":[{
-                    'id': 'adc kanaal0',
-                    'data': chan
-                },
-                {
-                    'id': 'adc kanaal1',
-                    'data': vol
-                }]
-            }
-            r = requests.post(url, verify=False,  json=data)
-            #break
-t = 60
-sec = 0
-
-def countdown():
-           
-    if (sec >= 10):
-    
-        mins, secs = divmod(t, 60)
-        timer = '{:02d}:{:02d}'.format(mins, secs)
-        #print(timer, end="\r")
-        time.sleep(1)
-        t = t - 1
-        
-        draw = ImageDraw.Draw(image)
-        draw.rectangle((0,0,display.width, display.height), outline = 255, fill=255)
-        
-        draw.text((1,20), (str(timer, end="\r")), font = font)
-
-        display.image(image)
-        display.show()
-
-try:
-    
-    _thread.start_new_thread(ubeac, ())
-        
     while True:
-    
-        channel = readadc(0) # read channel 0
+        # read the mpc volume and store it in an int   
+        disVol=os.popen("mpc volume",'r')
+
+        disVol = disVol.readline()
+        disVol = str(disVol)
+        maxVol = "100"
+
+        if maxVol in disVol:
+            disVol = disVol.partition("volume:")[2]
+        else: 
+            disVol = disVol.partition("volume: ")[2]
+
+        disVol = disVol.partition("%")[0]        
+        disVol = int(disVol)
+        
+        chan = i  
+        
+        data= {
+            "id": uid,
+            "sensors":[{
+                'id': 'adc kanaal0',
+                'data': chan
+            },
+            {
+                'id': 'adc kanaal1',
+                'data': disVol
+            }]
+        }
+        r = requests.post(url, verify=False,  json=data)
+        #break
+
+# initiate timer from 60 sec when volume is 0 for 10 seconds, until volume is changed
+def countdown(): 
+   
+        sec = 0
+        t = 60
         volume = readadc(1) # read channel 1
-        
-        while (oldVolume != volume and oldVolume+1 != volume and oldVolume-1 != volume and oldVolume+2 != volume and oldVolume-2 != volume and oldVolume+3 != volume and oldVolume-3 != volume and oldVolume+4 != volume and oldVolume-4 != volume and oldVolume+5 != volume and oldVolume-5 != volume and oldVolume+6 != volume and oldVolume-6 != volume):        
-            vol = round((volume/10.23))
-            os.system("mpc volume %s"%vol)
-            oldVolume = volume
-            break
-        
+        oldVolume = volume
+    
+        # read the mpc volume and store it in an int   
         disVol=os.popen("mpc volume",'r')
 
         disVol = disVol.readline()
@@ -175,11 +162,142 @@ try:
 
         disVol = disVol.partition("%")[0]
                 
+        disVol = int(disVol)         
+        
+        for x in range(10):
+            
+            volume = readadc(1) # read channel 1
+            
+            # keep volume steady when not turning on volume dail
+            while (oldVolume != volume and oldVolume+1 != volume and oldVolume-1 != volume and oldVolume+2 != volume and oldVolume-2 != volume and oldVolume+3 != volume and oldVolume-3 != volume and oldVolume+4 != volume and oldVolume-4 != volume and oldVolume+5 != volume and oldVolume-5 != volume and oldVolume+6 != volume and oldVolume-6 != volume and oldVolume+7 != volume and oldVolume-7 != volume and oldVolume+8 != volume and oldVolume-8 != volume and oldVolume+9 != volume and oldVolume-9 != volume and oldVolume+10 != volume and oldVolume-10 != volume): 
+            
+                vol = round((volume/10.23))
+                vol = vol - 100
+                vol = abs(vol)
+                os.system("mpc volume %s"%vol)
+                oldVolume = volume
+            
+            # read the mpc volume and store it in an int   
+            disVol=os.popen("mpc volume",'r')
+
+            disVol = disVol.readline()
+            disVol = str(disVol)
+            maxVol = "100"
+
+            if maxVol in disVol:
+                disVol = disVol.partition("volume:")[2]
+            else: 
+                disVol = disVol.partition("volume: ")[2]
+
+            disVol = disVol.partition("%")[0]
+                    
+            disVol = int(disVol)
+
+            if (disVol == 0):   
+                sec = sec + 1
+                print(sec)
+                time.sleep(1)       
+            else:
+                break            
+                
+        if (sec == 10):
+            
+            while (disVol == 0):            
+            
+                while t: # while t > 0 for clarity 
+                
+                    mins = t // 60
+                    secs = t % 60
+                    timer = '{:02d}:{:02d}'.format(mins, secs)
+                    print(timer, end="\r") # overwrite previous line 
+                    time.sleep(1)
+                    t -= 1
+                    
+                    draw = ImageDraw.Draw(image)
+                    draw.rectangle((0,0,display.width, display.height), outline = 255, fill=255)
+                    
+                    draw.text((1,2), (str("Shutting down")), font = font)
+                    draw.text((1,12), (str("in %s"%timer)), font = font)
+                    draw.text((1,26), (str("Turn volume up")), font = font2)
+                    draw.text((1,34), (str("to stop shutdown")), font = font2)
+
+                    display.image(image)
+                    display.show()
+                    
+                    volume = readadc(1) # read channel 1
+                    
+                    # keep volume steady when not turning on volume dail
+                    while (oldVolume != volume and oldVolume+1 != volume and oldVolume-1 != volume and oldVolume+2 != volume and oldVolume-2 != volume and oldVolume+3 != volume and oldVolume-3 != volume and oldVolume+4 != volume and oldVolume-4 != volume and oldVolume+5 != volume and oldVolume-5 != volume and oldVolume+6 != volume and oldVolume-6 != volume and oldVolume+7 != volume and oldVolume-7 != volume and oldVolume+8 != volume and oldVolume-8 != volume and oldVolume+9 != volume and oldVolume-9 != volume and oldVolume+10 != volume and oldVolume-10 != volume): 
+                        vol = round((volume/10.23))
+                        vol = vol - 100
+                        vol = abs(vol)
+                        os.system("mpc volume %s"%vol)
+                        oldVolume = volume
+                    
+                    voltext = "volume = %s"%disVol
+                    draw.text((1,24), (str(voltext)), font = font)
+                    
+                    break
+                
+                # read the mpc volume and store it in an int   
+                disVol=os.popen("mpc volume",'r')
+
+                disVol = disVol.readline()
+                disVol = str(disVol)
+                maxVol = "100"
+
+                if maxVol in disVol:
+                    disVol = disVol.partition("volume:")[2]
+                else: 
+                    disVol = disVol.partition("volume: ")[2]
+
+                disVol = disVol.partition("%")[0]       
+                disVol = int(disVol)
+                
+                if (t == 0):
+                    os.system ("sudo shutdown now")
+                    break
+                
+               
+try:
+    
+    #start ubeac thread
+    _thread.start_new_thread(ubeac, ())
+     
+    
+    while True:
+        
+        channel = readadc(0) # read channel 0
+        volume = readadc(1) # read channel 1
+        
+        # keep volume steady when not turning on volume dail
+        while (oldVolume != volume and oldVolume+1 != volume and oldVolume-1 != volume and oldVolume+2 != volume and oldVolume-2 != volume and oldVolume+3 != volume and oldVolume-3 != volume and oldVolume+4 != volume and oldVolume-4 != volume and oldVolume+5 != volume and oldVolume-5 != volume and oldVolume+6 != volume and oldVolume-6 != volume and oldVolume+7 != volume and oldVolume-7 != volume and oldVolume+8 != volume and oldVolume-8 != volume and oldVolume+9 != volume and oldVolume-9 != volume and oldVolume+10 != volume and oldVolume-10 != volume):        
+            vol = round((volume/10.23))
+            vol = vol - 100
+            vol = abs(vol)
+            os.system("mpc volume %s"%vol)
+            oldVolume = volume
+            break
+         
+        # read the mpc volume and store it in an int        
+        disVol=os.popen("mpc volume",'r')
+
+        disVol = disVol.readline()
+        disVol = str(disVol)
+        maxVol = "100"
+
+        if maxVol in disVol:
+            disVol = disVol.partition("volume:")[2]
+        else: 
+            disVol = disVol.partition("volume: ")[2]
+
+        disVol = disVol.partition("%")[0]         
         disVol = int(disVol)
         
         draw = ImageDraw.Draw(image)
         draw.rectangle((0,0,display.width, display.height), outline = 255, fill=255)
         
+        # read station that is currently playing
         f =os.popen("mpc current")
         station = " "
         for s in f.readlines():
@@ -188,29 +306,24 @@ try:
         text = station.partition("http://playerservices.streamtheworld.com/api/livestream-redirect/")[2]
         text = text.partition(".mp3")[0]
         
-        length = len(text)
         voltext = "volume = %s"%disVol
         chantext = "channel = %s"%channel
         ip = "192.168.0.10"
         
-        if (length > 12): 
-            a,b = text.split(" ",1)
-            draw.text((1,0), (str(a)), font=font)
-            draw.text((1,8), (str(b)), font=font)
-            draw.text((1,24), (str(voltext)), font = font)
-            draw.text((1,34), (str(ip)), font = font)
-            
-        else:
-            draw.text((1,0), (str(text)), font=font)
-            draw.text((1,24), (str(voltext)), font = font)
-            draw.text((1,34), (str(ip)), font = font)
+        draw.text((1,0), (str(text)), font=font)
+        draw.text((1,24), (str(voltext)), font = font)
+        draw.text((1,34), (str(ip)), font = font)
             
         display.image(image)
         display.show()
-         
+        
+        # countdown function
+        countdown()
+        
         while (channel >= 492 and channel <= 532):
             oldChannel = 512
             break
+        # check the i value when already on 6, you can't go a channel to the right anymore
         if (i < 6 and i >= 1):         
             if (channel == 0 and oldChannel == 512):
                 for x in range(64):
@@ -219,9 +332,11 @@ try:
                     blink(22,25),
                     blink(25,17)
                 oldChannel = channel
+                i = i + 1
+                
+                # clear the playlist from the webinterface and load the playlist again
                 os.system("mpc clear")
                 os.system("mpc load playlist")
-                i = i + 1
                 if (i==1):
                     os.system("mpc play 1")
                 elif (i==2):
@@ -234,13 +349,14 @@ try:
                     os.system("mpc play 5")
                 elif (i==6):
                     os.system("mpc play 6")
-                    
-                stri = str(i)
-                f = open("channel_count.txt", "w")
-                f.write(stri)
-                f.close()
                 
-        
+                # write i to .txt file, in order for the radio to remember the last played station before shutdown               
+                stri = str(i)
+                txt = open("channel_count.txt", "w")
+                txt.write(stri)
+                txt.close()
+                
+        # check the i value when already on 1, you can't go a channel to the left anymore
         if (i <= 6 and i > 1):
             if (channel == 1023 and oldChannel == 512):
                 for x in range(64):
@@ -250,6 +366,8 @@ try:
                     blink(17,27)
                 oldChannel = channel
                 i = i - 1
+                
+                # clear the playlist from the webinterface and load the playlist again
                 oldChannel = channel
                 os.system("mpc clear")
                 os.system("mpc load playlist")
@@ -265,25 +383,20 @@ try:
                     os.system("mpc play 5")
                 elif (i==6):
                     os.system("mpc play 6")
-                    
+                
+                # write i to .txt file, in order for the radio to remember the last played station before shutdown                
                 stri = str(i)
-                f = open("channel_count.txt", "w")
-                f.write(stri)
-                f.close()
+                txt = open("channel_count.txt", "w")
+                txt.write(stri)
+                txt.close()
         
-        
-        while (vol == 0):
-        
-            time.sleep(1)
-            sec = sec + 1      
-            _thread.start_new_thread(countdown, ())
 
 except KeyboardInterrupt:
     stri = str(i)
-    f = open("channel_count.txt", "w")
-    f.write(stri)
-    f.close()
+    txt = open("channel_count.txt", "w")
+    txt.write(stri)
+    txt.close()
     os.system("mpc stop")	
     print("Program stopped")			
     GPIO.cleanup()
-    #os.system("sudo shutdown now")
+
