@@ -9,7 +9,7 @@ sudo mkdir -p /etc/pifi
 sudo wget https://raw.githubusercontent.com/LienHoudenaert/pi-internet_radio/main/docs/streams.json -O /etc/pifi/streams.json
 
 Edit streams.json:
-sudo nano etc/pifi/streams.json
+sudo nano /etc/pifi/streams.json
 
 sudo wget https://raw.githubusercontent.com/LienHoudenaert/pi-internet_radio/main/docs/config.json -O /etc/pifi/config.json
 
