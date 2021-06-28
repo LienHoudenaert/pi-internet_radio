@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import os
 import cgitb; cgitb.enable()
 import spidev
@@ -83,7 +85,7 @@ def blink(pin1,pin2):
 	time.sleep(0.0001)
 
 #open and read the file:
-txt = open("channel_count.txt", "r")
+txt = open("/home/pi/channel_count.txt", "r")
 i = int(txt.read())
 
 if (i == 1):
@@ -352,7 +354,7 @@ try:
                 
                 # write i to .txt file, in order for the radio to remember the last played station before shutdown               
                 stri = str(i)
-                txt = open("channel_count.txt", "w")
+                txt = open("/home/pi/channel_count.txt", "w")
                 txt.write(stri)
                 txt.close()
                 
@@ -386,17 +388,16 @@ try:
                 
                 # write i to .txt file, in order for the radio to remember the last played station before shutdown                
                 stri = str(i)
-                txt = open("channel_count.txt", "w")
+                txt = open("/home/pi/channel_count.txt", "w")
                 txt.write(stri)
                 txt.close()
         
 
 except KeyboardInterrupt:
     stri = str(i)
-    txt = open("channel_count.txt", "w")
+    txt = open("/home/pi/channel_count.txt", "w")
     txt.write(stri)
     txt.close()
     os.system("mpc stop")	
     print("Program stopped")			
     GPIO.cleanup()
-
