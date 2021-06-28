@@ -1,6 +1,7 @@
 [Unit]
-Description=Radio Service
-After=multi-user.target
+Description=Radio
+Wants=pifi.service systemd-networkd-wait-online.service
+After=systemd-networkd-wait-online.service pifi.service
 
 [Service]
 Type=simple
