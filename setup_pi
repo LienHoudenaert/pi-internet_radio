@@ -59,3 +59,5 @@ sudo curl -sS https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-
 Run again: sudo curl -sS https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/i2samp.sh | bash
 
 sudo reboot
+
+sudo systemctl enable systemd-networkd.service systemd-networkd-wait-online.service
