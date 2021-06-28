@@ -1,9 +1,11 @@
 #Download files needed for the internet radio
 
-sudo wget https://raw.githubusercontent.com/LienHoudenaert/pi-internet_radio/main/case/case.py -O /home/pi/case.py
+sudo wget https://raw.githubusercontent.com/LienHoudenaert/pi-internet_radio/main/case/radio.py -O /home/pi/radio.py
 sudo wget https://raw.githubusercontent.com/LienHoudenaert/pi-internet_radio/main/case/channel_count.txt -O /home/pi/channel_count.txt
 
 sudo wget https://raw.githubusercontent.com/LienHoudenaert/pi-internet_radio/main/playlist/playlist.m3u -O /var/lib/mpd/playlists/playlist.m3u
 mpc load playlist
 
-sudo python3 case.py
+sudo wget https://raw.githubusercontent.com/LienHoudenaert/pi-internet_radio/main/docs/radio.service -O /lib/systemd/radio.service
+
+sudo python3 radio.py
